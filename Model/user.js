@@ -4,15 +4,16 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var User = new Schema({
-	google: {
-      oauthID: Number,
-      name: String,
-      created: Date
-	},
-    poll_data: { 
-      Poll_name: String,
-      Questions : Array,
-      Votes : Array
+   login_details:{
+        oauthID: {},
+        name: String,
+        created: Date
+   },
+   place_data:{ 
+        liked_places: Array
+   },
+   past_searches:{
+      results: Array
    }
 });
 

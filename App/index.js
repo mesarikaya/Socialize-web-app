@@ -1,97 +1,166 @@
 'use strict';
 
-var FormHandler = require(process.cwd() + '/Controllers/formHandler_server.js');
+var FormHandler = require(process.cwd() + '/Controllers/formHandler.js');
 
 
-module.exports = function(app, passport) {
+module.exports = function(app, passport, asyncr) {
+    
+    // Introduce the backend form handler javascripts
     var formHandler = new FormHandler();
-        
+    
+    // Create authentication check via using passport.js    
     function ensureAuthenticated(req, res, next) {
+      console.log("Authentications result is:", req.isAuthenticated());
       if (req.isAuthenticated()){
-        return next();
+          // If authentrication is successfull, do the next action
+          return next();
       }
       else{
-          //Do nothing, stay in the current page
-          res.redirect('/');
+          //Warn the user about logged out status, and redirect to cover page
+          setTimeout(res.redirect('/flash'), 10);
       }
     }
-
-    app.route('/home')
-            .get(function(req,res){
-                formHandler.displayPolls(req, res, 'true');
-            });
     
+    // Create safety for attempts to reach the /user interface without authentication
+    app.get('/flash', function(req, res){
+        // Set a flash message by passing the key, followed by the value, to req.flash().
+        req.flash('info','Logged out or Unauthorized Log In Attempt. Please log in!');
+        setTimeout(res.redirect('/'), 10);
+    });
     
-    // Check login at home page on open
-    app.route('/')
-            .get(function(req,res){
-                res.sendFile(process.cwd() + '/Public/views/index.html');
-            });
-    
-    // Check home page on open
+    //CREATE AUTHENTICATIONS FOR Google, Facebook, LinkedIn, Twitter and Github
+    // Google Authenticate
     app.route('/auth/google')
-            .get(passport.authenticate('google',
-                {scope: [
-                'https://www.googleapis.com/auth/plus.login',
-                'https://www.googleapis.com/auth/plus.profile.emails.read'
-                ]}
-            ));
+        .get(passport.authenticate('google',
+            {scope: [
+            'https://www.googleapis.com/auth/plus.login',
+            'https://www.googleapis.com/auth/plus.profile.emails.read'
+            ]}
+    ));
     
-    // Googlecallback call
+    //Google callback call
     app.get('/auth/google/callback',
       passport.authenticate('google', { failureRedirect: '/' }),
       function(req, res) {
-        res.redirect('/login');
+        setTimeout(res.redirect('/user'), 10);
+    });
+          
+    //Facebook Authenticate   
+    app.route('/auth/facebook')
+            .get(passport.authenticate('facebook',
+                {}
+            ));
+    
+    //Facebook callback call
+    app.get('/auth/facebook/callback',
+      passport.authenticate('facebook', { failureRedirect: '/' }),
+      function(req, res) {
+            setTimeout(res.redirect('/user'), 10);
     });
     
-    //Check if authentication exits and open the logged in page
-    app.route('/login')
-            .get(ensureAuthenticated,function (req, res) {
-                res.sendFile(process.cwd() + '/Public/views/login.html');
-            });
+    //Twitter Authenticate   
+    app.route('/auth/twitter')
+            .get(passport.authenticate('twitter',
+                {}
+            ));
     
-    //On button clicks display the list
-    app.route('/loggedin/:viewType')
-            .get(ensureAuthenticated, function (req, res){
-                formHandler.displayPolls(req,res, req.params.viewType.toString());
-            })            
-            .post(ensureAuthenticated,function (req, res) {
-                res.sendFile(process.cwd() + '/Public/views/login.html');
-            });
+    //Twitter callback call
+    app.get('/auth/twitter/callback',
+      passport.authenticate('twitter', { failureRedirect: '/' }),
+      function(req, res) {
+            setTimeout(res.redirect('/user'), 10);
+    });
     
-    // Default page after authentication
-    app.route('/loggedin')
-            .get(ensureAuthenticated, function (req, res){
-                var search = 'true';
-                formHandler.displayPolls(req,res, search);
-            })
-            .post(ensureAuthenticated,function (req, res) {
-                formHandler.insertDetails(req,res);
-                res.redirect('/login');
-            });
-     
-     //After logout go back to opening page
+    //Linkedin Authenticate   
+    app.route('/auth/linkedin')
+            .get(passport.authenticate('linkedin',
+                {}
+            ));
+    
+    //Linkedin callback call
+    app.get('/auth/linkedin/callback',
+      passport.authenticate('linkedin', { failureRedirect: '/' }),
+      function(req, res) {
+            setTimeout(res.redirect('/user'), 10);
+    });
+    
+    //Github Authenticate   
+    app.route('/auth/github')
+            .get(passport.authenticate('github',
+                {}
+            ));
+    
+    //Github callback call
+    app.get('/auth/github/callback',
+      passport.authenticate('github', { failureRedirect: '/' }),
+      function(req, res) {
+            setTimeout(res.redirect('/user'), 10);
+    });
+    
+    //After logout go back to opening page
     app.route('/logout')
 		.get(function (req, res) {
 			req.logout();
-			res.redirect('/');
+            setTimeout(res.redirect('/guest'), 10);
 		});
     
-    // Open the selected poll and display its results
-    app.route('/poll/:pollid')
-            .post(function(req,res){
-                formHandler.updatePoll(req,res);
-                res.sendFile(process.cwd() + '/Public/views/poll.ejs');
-            })
-            .get(function(req, res){
-                formHandler.createPollResult(req,res);
+    //Direct to home page
+    app.route('/')
+            .get(function(req,res){
+                res.render(process.cwd()+'/Public/views/cover.ejs', {messages: req.flash('info') });
             });
     
-    //Delete the poll   
-    app.route('/poll/delete/:pollid')
-            .get(ensureAuthenticated,function(req, res){
-                formHandler.deletePoll(req,res);
-                res.redirect('/login');
+    // Control the user data for searched locations and likes
+    app.route('/user/show')
+            .post(ensureAuthenticated, function(req,res){
+                
+                // Check if post is called via Like button or page refresh
+                if (typeof(req.body.loc_data) !== 'undefined'){//save the location likes/dislikes
+                    formHandler.update_likes(req, res);
+                } 
+                if (typeof(req.body.data) !== 'undefined'){//page refresh
+                    if(typeof(req.user) === "undefined"){
+                        console.log("User is not recognized!. No past record search is made.");
+                    }
+                    else{//Save the new location search
+                       formHandler.record_search(req,res); 
+                    }
+                }
+                
+                // Redirect to "/user" router
+                setTimeout(res.redirect('/user'), 10);
+            });
+            
+    // Route for "/user"        
+    app.route('/user')
+         .get(ensureAuthenticated,function(req,res){
+                if(typeof(req.user) === "undefined"){
+                    //console.log("User is not recognized!. No page update request is made.");
+                    return res.redirect('/flash');
+                }
+                else{
+                    //User is logged in and recognized, then update the page with the latest search results
+                    formHandler.update_page(req, res, asyncr);
+                }
+         });
+    
+    // Direct the "/guest" request to relevant html
+    app.route('/guest')
+            .post(function(req,res){
+                res.sendFile(process.cwd() + '/Public/views/guest.html');
+            })
+            .get(function(req,res){
+                res.sendFile(process.cwd() + '/Public/views/guest.html');
+            });
+    
+    
+     app.route('/guest/search')
+            .post(function(req,res){
+                res.sendFile(process.cwd() + '/Public/views/guest.html');
+            })
+            .get(function(req,res){
+
+                res.sendFile(process.cwd() + '/Public/views/guest.html');
             });
 
 };

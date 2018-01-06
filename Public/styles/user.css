@@ -1,0 +1,53 @@
+
+        .navbar{
+                background-color: transparent;
+        }
+
+        #Search-Button {
+            background-color: rgba(243, 86, 232, 0.93);
+        }
+
+        @media screen and (max-width:38.974em) {
+
+            #Search-form {
+                margin-left: 3em;
+            }
+
+        }
+        @media screen and (min-width:38.975em) {
+
+            #Search-form {
+                margin-left: 0em;
+            }
+        }
+
+
+        #Event-img-content {
+            max-width: 7em;
+            max-height: 8em;
+            margin: 0.34em;
+        }
+
+        .card {
+            width: 50%;
+            max-height: 50em;
+            margin: 1em;
+            background-color: rgb(255,255,255,0.95);
+        }
+
+        .card-text {
+            font-size: 0.9em;
+            margin-left: 1em;
+        }
+
+        .card-footer {
+            background-color: rgba(226, 182, 22, 0.27);
+        }
+        .disabled {
+            display: none;
+        }
+
+        .text-muted {
+            font-size: 0.7em;
+
+        }
