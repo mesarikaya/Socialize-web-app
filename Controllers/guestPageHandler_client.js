@@ -7,7 +7,7 @@
    var searchForm = document.querySelector('#SearchInputForm');
    var location = document.querySelector('#location');
    var geoLoc = document.querySelector('#suggested_location');
-   var apiUrl = 'https://social-life-app-mesarikaya.c9users.io';
+   var apiUrl = 'https://socialsearch-app.herokuapp.com';
    var Cards = document.querySelector("#Cards");
    var attendButton = document.querySelector('.attend');
    var cancelButton = document.querySelector('.cancel');   
