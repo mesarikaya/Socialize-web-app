@@ -55,7 +55,7 @@ module.exports = function(app, passport, asyncr) {
     app.get('/auth/facebook/callback',
       passport.authenticate('facebook', { failureRedirect: '/' }),
       function(req, res) {
-            setTimeout(res.redirect('/user'), 10);
+           res.redirect('/user')
     });
     
     //Twitter Authenticate   
@@ -68,7 +68,7 @@ module.exports = function(app, passport, asyncr) {
     app.get('/auth/twitter/callback',
       passport.authenticate('twitter', { failureRedirect: '/' }),
       function(req, res) {
-            setTimeout(res.redirect('/user'), 10);
+            res.redirect('/user')
     });
     
     //Linkedin Authenticate   
@@ -81,7 +81,7 @@ module.exports = function(app, passport, asyncr) {
     app.get('/auth/linkedin/callback',
       passport.authenticate('linkedin', { failureRedirect: '/' }),
       function(req, res) {
-            setTimeout(res.redirect('/user'), 10);
+            res.redirect('/user')
     });
     
     //Github Authenticate   
@@ -94,14 +94,14 @@ module.exports = function(app, passport, asyncr) {
     app.get('/auth/github/callback',
       passport.authenticate('github', { failureRedirect: '/' }),
       function(req, res) {
-            setTimeout(res.redirect('/user'), 10);
+            res.redirect('/user')
     });
     
     //After logout go back to opening page
     app.route('/logout')
 		.get(function (req, res) {
 			req.logout();
-            setTimeout(res.redirect('/guest'), 10);
+            		res.redirect('/guest')
 		});
     
     //Direct to home page
@@ -116,6 +116,7 @@ module.exports = function(app, passport, asyncr) {
                 
                 // Check if post is called via Like button or page refresh
                 if (typeof(req.body.loc_data) !== 'undefined'){//save the location likes/dislikes
+		    console.log("save Likes/dislikes");
                     formHandler.update_likes(req, res);
                 } 
                 if (typeof(req.body.data) !== 'undefined'){//page refresh
@@ -123,12 +124,14 @@ module.exports = function(app, passport, asyncr) {
                         console.log("User is not recognized!. No past record search is made.");
                     }
                     else{//Save the new location search
-                       formHandler.record_search(req,res); 
+                        console.log("Save the new location search");
+			formHandler.record_search(req,res); 
                     }
                 }
                 
                 // Redirect to "/user" router
-                setTimeout(res.redirect('/user'), 10);
+                console.log("direct to user page");
+	    	res.redirect('/user')
             });
             
     // Route for "/user"        
