@@ -17,7 +17,7 @@ module.exports = function(app, passport, asyncr) {
       }
       else{
           //Warn the user about logged out status, and redirect to cover page
-          setTimeout(res.redirect('/flash'), 10);
+          res.redirect('/flash');
       }
     }
     
@@ -25,7 +25,7 @@ module.exports = function(app, passport, asyncr) {
     app.get('/flash', function(req, res){
         // Set a flash message by passing the key, followed by the value, to req.flash().
         req.flash('info','Logged out or Unauthorized Log In Attempt. Please log in!');
-        setTimeout(res.redirect('/'), 10);
+        res.redirect('/');
     });
     
     //CREATE AUTHENTICATIONS FOR Google, Facebook, LinkedIn, Twitter and Github
@@ -36,13 +36,13 @@ module.exports = function(app, passport, asyncr) {
             'https://www.googleapis.com/auth/plus.login',
             'https://www.googleapis.com/auth/plus.profile.emails.read'
             ]}
-    ));
+         ));
     
     //Google callback call
     app.get('/auth/google/callback',
       passport.authenticate('google', { failureRedirect: '/' }),
       function(req, res) {
-        setTimeout(res.redirect('/user'), 10);
+            res.redirect('/user');
     });
           
     //Facebook Authenticate   

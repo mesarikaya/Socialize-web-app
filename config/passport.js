@@ -13,13 +13,13 @@ module.exports = function (passport) {
     //console.log("Client Id is: ", configAuth.googleAuth);
     // config
     passport.serializeUser(function(user, done) {
-      //console.log('serializeUser: ' + user.id);
+      console.log('serializeUser: ' + user.id);
       done(null, user.id);
     });
     
     passport.deserializeUser(function(id, done) {
       User.findById(id, function(err, user){
-          //console.log("Deserializing the user:", user);
+          console.log("Deserializing the user:", user);
           if(!err) done(null, user);
           else done(err, null);
         });
@@ -33,7 +33,7 @@ module.exports = function (passport) {
       callbackURL: configAuth.googleAuth.callbackURL
       },
       function(accessToken, refreshToken, profile, done) {
-            console.log("Profile is:", profile.id);
+        console.log("Profile is:", profile);
         		process.nextTick(function () {
               User.findOne({ 'login_details.oauthID': profile.id }, function(err, user) {
       				if (err) {
@@ -162,7 +162,7 @@ module.exports = function (passport) {
         },
         function(accessToken, refreshToken, profile, done) {
           		process.nextTick(function () {
-                User.findOne({ 'login_details.oauthID': profile.id }, function(err, user) {
+                  User.findOne({ 'login_details.oauthID': profile.id }, function(err, user) {
             				if (err) {
             				  //console.log("profile id is: ", profile.id);
             					return done(err);
@@ -170,7 +170,7 @@ module.exports = function (passport) {
             
           				if (user) {
           				  console.log("User exists!!!!");
-          					 return done(null, user);
+          					return done(null, user);
           				} 
           				else {
           				  console.log("New user created!!!!");
@@ -212,11 +212,11 @@ module.exports = function (passport) {
             				}
             
           				if (user) {
-          				  console.log("User exists!!!!");
-          					return done(null, user);
+          				   console.log("User exists!!!!");
+          					 return done(null, user);
           				} 
           				else {
-          				  console.log("New user created!!!!");
+          				    console.log("New user created!!!!");
       
             					var newUser = new User();
             					//console.log("Profile is:", profile.id, profile.displayName);

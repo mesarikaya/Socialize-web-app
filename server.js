@@ -22,9 +22,7 @@ require('./config/passport')(passport);
 var url = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/socialize-app';
 
 //Connect to the database
-mongoose.connect(url, {
-  useMongoClient: true,
-});
+mongoose.connect(url);
 mongoose.Promise = global.Promise;
 
 // Configure
@@ -44,8 +42,7 @@ app.use(flash());
 app.use(session({
 	secret: process.env.session_secret,
 	resave: false,
-	saveUninitialized: true,
-	cookie: { maxAge: 60000 }
+	saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());

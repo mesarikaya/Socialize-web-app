@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 
 var User = new Schema({
    login_details:{
-        oauthID: {},
+        oauthID: Number,
         name: String,
         created: Date
    },
