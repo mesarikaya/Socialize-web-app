@@ -22,7 +22,9 @@ require('./config/passport')(passport);
 var url = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/socialize-app';
 
 //Connect to the database
-mongoose.connect(url);
+mongoose.connect(url, {
+  useMongoClient: true,
+});
 mongoose.Promise = global.Promise;
 
 // Configure
