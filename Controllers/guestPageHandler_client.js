@@ -73,7 +73,7 @@
                           if (xmlhttp2.status == 200) {
                              var result =  JSON.parse(xmlhttp2.responseText);
                              result = result.response.groups["0"].items;
-                             
+                             comsole.log("Result is from Foursquare is:", result);
                              var keys = [];
                              for(var k in result) keys.push(k);
                              //console.log("keys are: ", keys, result);
@@ -81,20 +81,26 @@
                              for (var item in result) {
                                var data = result[item];
                                //console.log("item: ", item);
-                               if(typeof(data.venue.featuredPhotos) !== 'undefined'){
-                                          var photo_prefix = data.venue.featuredPhotos.items["0"].prefix;
+                               if(typeof(data.venue.categories["0"].icon.prefix) !== 'undefined'){
+                                          var photo_prefix = data.venue.categories["0"].icon.prefix;
                                           photo_prefix = photo_prefix.replace("\/","/");
-                                          var photo_suffix = data.venue.featuredPhotos.items["0"].suffix;
+                                          var photo_suffix = data.venue.categories["0"].icon.suffix;
                                           photo_suffix = photo_suffix.replace("\/","/");
                                           var photo_url = photo_prefix.toString() + "200x200" + photo_suffix;
                                           var EventTitle = data.venue.name;
                                           //var EventSummary = data.reasons.items["0"].summary;
                                           var EventDetails = data.venue.categories["0"].name;
-                                          var EventURL = data.venue.url;
-                                          
-                                          if (typeof(EventURL) === 'undefined'){
-                                            EventURL = "Not Applicable";
+                                          var EventURL = "Not Applicable";
+                                          try {
+                                             var EventURL = data.venue.url;
                                           }
+                                          catch{
+                                             if (typeof(EventURL) === 'undefined'){
+                                               EventURL = "Not Applicable";
+                                             }
+                                          }
+                                          
+
                                           var address = "Address: " + data.venue.location.address + ", " + data.venue.location.postalCode + " " + data.venue.location.city + ", " + data.venue.location.country;
                                           Cards_text += '<div class="row-fluid d-flex justify-content-center"><div class="card "><div class="card-block">'+
                                                            '<img class="card-img img-fluid float-left" id="Event-img-content"'+
