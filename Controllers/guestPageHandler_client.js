@@ -74,7 +74,7 @@
                           if (xmlhttp2.status == 200) {
                              var result =  JSON.parse(xmlhttp2.responseText);
                              result = result.response.groups["0"].items;
-                             comsole.log("Result is from Foursquare is:", result);
+                             console.log("Result is from Foursquare is:", result);
                              var keys = [];
                              for(var k in result) keys.push(k);
                              //console.log("keys are: ", keys, result);
