@@ -51,6 +51,7 @@
             
             
             try{
+               console.log("In the try start");
                     var val = 	$('#suggested_location').html();
                     val = val.split(", ");
                     
@@ -67,7 +68,7 @@
                     var xmlhttp2 = new XMLHttpRequest();
                     
                     xmlhttp2.onreadystatechange = function () {
-                       
+                       console.log("Ajax successful from FourSquare");
                        if (xmlhttp2.readyState == 4 ) {
                           console.log(xmlhttp2.status);
                           if (xmlhttp2.status == 200) {
@@ -100,6 +101,7 @@
                                              }
                                           }
                                           
+                                          console.log("Here is the data",photo_url, EventDetails, EventURL);
 
                                           var address = "Address: " + data.venue.location.address + ", " + data.venue.location.postalCode + " " + data.venue.location.city + ", " + data.venue.location.country;
                                           Cards_text += '<div class="row-fluid d-flex justify-content-center"><div class="card "><div class="card-block">'+
