@@ -15,6 +15,8 @@ var User = new Schema({
    past_searches:{
       results: Array
    }
-});
+}, {
+        usePushEach: true
+    });
 
 module.exports = mongoose.model('User', User);

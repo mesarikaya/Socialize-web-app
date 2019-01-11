@@ -13,6 +13,7 @@ module.exports = function(app, passport, asyncr) {
       console.log("Authentications result is:", req.isAuthenticated());
       if (req.isAuthenticated()){
           // If authentrication is successfull, do the next action
+          console.log("USer is authenticated");
           return next();
       }
       else{
@@ -113,10 +114,10 @@ module.exports = function(app, passport, asyncr) {
     // Control the user data for searched locations and likes
     app.route('/user/show')
             .post(ensureAuthenticated, function(req,res){
-                
+                console.log("Reached the post place");
                 // Check if post is called via Like button or page refresh
                 if (typeof(req.body.loc_data) !== 'undefined'){//save the location likes/dislikes
-		    console.log("save Likes/dislikes");
+		            console.log("save Likes/dislikes");
                     formHandler.update_likes(req, res);
                 } 
                 if (typeof(req.body.data) !== 'undefined'){//page refresh
@@ -125,7 +126,7 @@ module.exports = function(app, passport, asyncr) {
                     }
                     else{//Save the new location search
                         console.log("Save the new location search");
-			formHandler.record_search(req,res); 
+			            formHandler.record_search(req,res); 
                     }
                 }
                 
