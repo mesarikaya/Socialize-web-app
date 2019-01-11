@@ -29,10 +29,8 @@ var ajaxFunctions = {
     },
     ajaxPostRequest: function ajaxRequest (method, url, data) {
       var xmlhttp = new XMLHttpRequest();
-      console.log("Common ajax send data: ", data);
       xmlhttp.onreadystatechange = function () {
           if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-              console.log("Sending data to web page.", data);
               window.location.href = "/user";
           } else {
               console.log("Error in post request with status: ", xmlhttp.status);

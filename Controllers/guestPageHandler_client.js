@@ -33,7 +33,7 @@
             			    window.alert("No details available for input: '" + place.name + "'");
             			}
             			else{
-            			    console.log("Change is catched.", place.geometry.location);
+            			    //console.log("Change is catched.", place.geometry.location);
             			}
             			
            });
@@ -51,7 +51,7 @@
             
             
             try{
-               console.log("In the try start");
+               
                 var val = 	$('#suggested_location').html();
                 val = val.split(", ");
                     
@@ -63,18 +63,18 @@
                 var client_secret = "MAKOU1DN1R2UWUFQA4GOBAG5HOY5R11YNO1Q1PKOSHBQG2P4";
                 
                 var baseURL = 'https://api.foursquare.com/v2/venues/explore?v=20161016&ll=';
-                var fourSquareURL = baseURL + latitude.toString() + ",%" + "20" + longitude.toString()  +"&" + "section=" + searchOption.toString() +"&"+"venuePhotos=1"+"&"+"client_id="+client_id.toString()+"&client_secret="+client_secret.toString();
+                var fourSquareURL = baseURL + latitude.toString() + ",%" + "20" + longitude.toString() +"&" + "venuePhotos=1" + "&" + "section=" + searchOption.toString() + "&"+"client_id="+client_id.toString()+"&client_secret="+client_secret.toString();
                     
                 var xmlhttp2 = new XMLHttpRequest();
                     
                 xmlhttp2.onreadystatechange = function () {
-                    console.log("Ajax successful from FourSquare");
+                    //console.log("Ajax successful from FourSquare");
                     if (xmlhttp2.readyState == 4 ) {
-                        console.log(xmlhttp2.status);
+                        //console.log(xmlhttp2.status);
                         if (xmlhttp2.status == 200) {
                             var result =  JSON.parse(xmlhttp2.responseText);
                             result = result.response.groups["0"].items;
-                            console.log("Result is from Foursquare is:", result);
+                            //console.log("Result is from Foursquare is:", result);
                             var keys = [];
                             for(var k in result) keys.push(k);
                             //console.log("keys are: ", keys, result);
@@ -87,21 +87,29 @@
                                 photo_prefix = photo_prefix.replace("\/","/");
                                 var photo_suffix = data.venue.categories["0"].icon.suffix;
                                 photo_suffix = photo_suffix.replace("\/","/");
-                                var photo_url = photo_prefix.toString() + "200x200" + photo_suffix;
-                                var EventTitle = data.venue.name;
-                                //var EventSummary = data.reasons.items["0"].summary;
-                                var EventDetails = data.venue.categories["0"].name;
-                                var EventURL = "Not Applicable";
-                                try {
-                                    EventURL = data.venue.url;
-                                }
-                                catch{
-                                    if (typeof(EventURL) === 'undefined'){
-                                        EventURL = "Not Applicable";
+                                var photo_url = photo_prefix.toString() + "bg_88" + photo_suffix;
+                                if (typeof (data.venue.photos.count) !== 'undefined') {
+                                    if (data.venue.photos.count > 0 && typeof (data.venue.categories["0"].photos.groups["0"]) === 'undefined') {
+                                        var root = data.venue.categories["0"].photos.groups["0"].item["0"];
+                                        photo_url = root.prefix + "200x200" + root.suffix;
                                     }
                                 }
+                                       
+                                var EventTitle = data.venue.name;
+                                var EventDetails = data.venue.categories["0"].name;
+                                var EventURL = "Not Available";
+                                try {
+                                    EventURL = data.venue.url;
+                                }catch{
+                                    if (typeof(EventURL) === 'undefined'){
+                                        EventURL = "Not Available";
+                                    }
+                                }
+                                if (typeof (EventURL) === 'undefined' ) {
+                                    EventURL = "Not Available";
+                                }
                                           
-                                console.log("Here is the data",photo_url, EventDetails, EventURL);
+                                //console.log("Here is the data",photo_url, EventDetails, EventURL);
 
                                 var address = "Address: " + data.venue.location.address + ", " + data.venue.location.postalCode + " " + data.venue.location.city + ", " + data.venue.location.country;
                                 Cards_text += '<div class="row-fluid d-flex justify-content-center"><div class="card "><div class="card-block">'+

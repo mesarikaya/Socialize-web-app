@@ -114,25 +114,24 @@ module.exports = function(app, passport, asyncr) {
     // Control the user data for searched locations and likes
     app.route('/user/show')
             .post(ensureAuthenticated, function(req,res){
-                console.log("Reached the post place");
                 // Check if post is called via Like button or page refresh
                 if (typeof(req.body.loc_data) !== 'undefined'){//save the location likes/dislikes
-		            console.log("save Likes/dislikes");
+		            // console.log("save Likes/dislikes");
                     formHandler.update_likes(req, res);
                 } 
                 if (typeof(req.body.data) !== 'undefined'){//page refresh
                     if(typeof(req.user) === "undefined"){
-                        console.log("User is not recognized!. No past record search is made.");
+                        // console.log("User is not recognized!. No past record search is made.");
                     }
                     else{//Save the new location search
-                        console.log("Save the new location search");
+                        // console.log("Save the new location search");
 			            formHandler.record_search(req,res); 
                     }
                 }
                 
                 // Redirect to "/user" router
-                console.log("direct to user page");
-	    	res.redirect('/user')
+                // console.log("direct to user page");
+	    	    res.redirect('/user')
             });
             
     // Route for "/user"        
