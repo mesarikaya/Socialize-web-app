@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/mesarikaya/voting-app",
   "dependencies": {
-    "async": "^3.0.1-0",
+    "async": "^3.2.2",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^2.0.6",
